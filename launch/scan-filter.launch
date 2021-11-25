@@ -1,0 +1,7 @@
+<launch>
+<!--<remap from="/scan_filtered" to="/tryfan/front_laser/scan" />-->
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+    <rosparam command="load" file="$(find rplidar_ros)/config/wheelchair_laser_config.yaml" />
+    <remap from="/filtered_scan" to="/scan" />
+  </node>
+</launch>

@@ -1,0 +1,30 @@
+<launch>
+  <arg name="wheelchair_sim" default="false" />
+
+  <!--if wheelchair sim is true-->
+  <group if="$(arg wheelchair_sim)">
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find rplidar_ros)/config/wheelchair_laser_simulation_config.yaml" />
+      <remap from="/filtered_scan" to="/scan" />
+    </node>
+  </group>
+  
+  <!--if wheelchair sim is false-->
+  <group unless="$(arg wheelchair_sim)">
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+      <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+      <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+      <!--param name="serial_baudrate"     type="int"    value="256000"--><!--A3 -->
+      <param name="frame_id"            type="string" value="lidar_link"/>
+      <param name="inverted"            type="bool"   value="false"/>
+      <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <!--<remap from="/scan_filtered" to="/tryfan/front_laser/scan" />-->
+    <!--<node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find rplidar_ros)/config/wheelchair_laser_config.yaml" />
+      <remap from="/filtered_scan" to="/scan" />
+    </node>-->
+  </group>
+
+</launch>
